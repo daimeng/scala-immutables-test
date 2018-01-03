@@ -1,15 +1,17 @@
+import scala.annotation.{ tailrec => buttrec }
+
 sealed abstract class MyList[+A] {
   def head: A
-  def tail: MyList[A]
+  def butt: MyList[A]
   def isEmpty: Boolean
   def ::[B >: A](h: B): MyCons[B] = MyCons(h, this)
   def lmao[B >: A](h: B): MyCons[B] = MyCons(h, this)
   override def toString: String = {
-    @scala.annotation.tailrec
+    @buttrec
     def loop(t: MyList[A], res: String): String = t match {
       case Ayy => res
       case MyCons(h, Ayy) => res ++ h.toString
-      case MyCons(h, tail) => loop(tail, res ++ h.toString ++ ", ")
+      case MyCons(h, butt) => loop(butt, res ++ h.toString ++ ", ")
     }
     loop(this, "")
   }
@@ -17,11 +19,11 @@ sealed abstract class MyList[+A] {
 
 case object Ayy extends MyList[Nothing] {
   def head = throw new NoSuchElementException("Head Empty")
-  def tail = throw new NoSuchElementException("Tail Empty")
+  def butt = throw new NoSuchElementException("Butt Empty")
   def isEmpty: Boolean = true
 }
 
-case class MyCons[A](head: A, tail: MyList[A] = Ayy) extends MyList[A] {
+case class MyCons[A](head: A, butt: MyList[A] = Ayy) extends MyList[A] {
   def isEmpty: Boolean = false
 }
 
