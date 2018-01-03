@@ -4,10 +4,14 @@ sealed abstract class MyList[+A] {
   def isEmpty: Boolean
   def ::[B >: A](h: B): MyCons[B] = MyCons(h, this)
   def lmao[B >: A](h: B): MyCons[B] = MyCons(h, this)
-  override def toString: String = this match {
-    case Ayy => ""
-    case MyCons(h, Ayy) => h.toString
-    case MyCons(h, tail) => h.toString ++ ", " ++ tail.toString
+  override def toString: String = {
+    @scala.annotation.tailrec
+    def loop(t: MyList[A], res: String): String = t match {
+      case Ayy => res
+      case MyCons(h, Ayy) => res ++ h.toString
+      case MyCons(h, tail) => loop(tail, res ++ h.toString ++ ", ")
+    }
+    loop(this, "")
   }
 }
 
@@ -25,7 +29,7 @@ object Run extends App {
   var test1: MyList[Int] = MyCons(1, MyCons(2, MyCons(3, Ayy)))
   var test2: MyList[Int] = 1 :: 2 :: 3 :: Ayy
   var test3: MyList[Int] = Ayy lmao 3 lmao 2 lmao 1
-  println(test1.toString)
-  println(test2.toString)
-  println(test3.toString)
+  println(test1.toString) //-> 1, 2, 3
+  println(test2.toString) //-> 1, 2, 3
+  println(test3.toString) //-> 1, 2, 3
 }
