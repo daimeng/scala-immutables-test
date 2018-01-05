@@ -1,3 +1,5 @@
+import scala.annotation.tailrec
+
 sealed trait StackQueue[+A] {
   def isEmpty: Boolean
 
@@ -26,6 +28,7 @@ sealed trait StackQueue[+A] {
   }
 
   override def toString: String = {
+    @tailrec
     def loop(list: List[A], s: String): String = list match {
       case h :: Nil => s ++ h.toString
       case h :: tail => loop(tail, s ++ h.toString ++ "->")
